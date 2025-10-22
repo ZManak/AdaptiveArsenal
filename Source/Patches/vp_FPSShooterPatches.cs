@@ -41,6 +41,26 @@ internal static class vp_FPSShooterPatches
                                                              || __instance.ProjectilePrefab == null) return;
             if (!__instance.ProjectilePrefab.GetComponent<ProjectileItem>()) return;
             
+            // Check if weapon is frozen - prevent firing
+            var weaponCondition = __instance.m_Weapon.m_GunItem.GetComponent<Components.WeaponCondition>();
+            if (weaponCondition != null && weaponCondition.IsFrozen)
+            {
+                return; // Don't fire if frozen
+            }
+            
+            // Apply increased jamming based on weapon wetness
+            // Wet/freezing weapons have higher chance to jam
+            if (weaponCondition != null && weaponCondition.CurrentState != Components.WeaponState.Dry)
+            {
+                var jammingModifier = weaponCondition.GetJammingProbabilityModifier();
+                // Randomly jam based on wetness - base 5% chance increases with wetness
+                if (Random.value < (0.05f * jammingModifier))
+                {
+                    __instance.m_Weapon.m_GunItem.m_IsJammed = true;
+                    return;
+                }
+            }
+            
             ProjectileUtilities.SetBulletEmissionLocator(__instance);
             ProjectileUtilities.CalculateProjectileTransform(__instance, out var position, out var rotation);
 
