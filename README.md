@@ -27,6 +27,18 @@ Adaptive Arsenal is a modification that improves upon existing weapon mechanics 
 - **Muzzle Velocities:** Each weapon has a unique muzzle velocity parameter set, determining how far the bullet can travel.
 - **Visuals:** A trail follows behind the bullet for visual representation of its landing location.
 
+#### Weather-Based Weapon Mechanics
+- **Weapon Wetness:** Weapons become wet when the player falls into water, affecting performance.
+- **Drying System:** Wet weapons gradually dry over time, faster indoors or in warm conditions.
+- **Freezing Mechanics:** Wet weapons freeze in cold weather (below -5°C) and become unusable when frozen.
+- **Thawing:** Frozen weapons can be thawed by bringing them to warmth.
+- **Increased Jamming:** Wet and freezing weapons have significantly higher jamming rates.
+- **Weather Effects on Accuracy:** Cold weather reduces accuracy by up to 15%.
+- **Damage Modifications:** Extreme cold and wet conditions reduce weapon damage.
+- **Accelerated Deterioration:** Cold and wet conditions cause weapons to deteriorate faster.
+
+See [WEATHER_MECHANICS.md](WEATHER_MECHANICS.md) for detailed documentation.
+
 ---
 
 ## COMPATIBILITY:
