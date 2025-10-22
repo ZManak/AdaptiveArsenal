@@ -76,8 +76,8 @@ public class WeaponCondition : MonoBehaviour
     private void UpdateWeaponCondition()
     {
         var currentTemp = GameManager.GetWeatherComponent().GetCurrentTemperature();
-        // Simplified indoor check - assume indoors if temp is moderate
-        var isIndoors = currentTemp > 0 && currentTemp < 25;
+        // Use actual indoor/outdoor state from the game if available
+        var isIndoors = GameManager.GetWeatherComponent().IsPlayerIndoors();
         
         // Drying logic
         if (m_WetnessLevel > 0)
