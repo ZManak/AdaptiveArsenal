@@ -35,12 +35,12 @@ Provides modifiers for weapon stats based on weather:
 
 #### Accuracy Modifiers
 - Cold weather (< 0°C): 10% accuracy reduction
-- Very cold weather (< -15°C): Additional 5% reduction
+- Very cold weather (< -15°C): Additional 5% reduction (applied multiplicatively, i.e., 0.90 × 0.95 = 0.855, for a total 14.5% reduction)
 
 #### Damage Modifiers
 - Extreme cold (< -20°C): 5% damage reduction
 - Wet weapon: 10% damage reduction
-- **Combined**: Up to 15% damage reduction
+- **Combined**: Up to 14.5% reduction when both penalties apply (multiplicative stacking)
 
 #### Deterioration Modifiers
 - Cold weather (< -10°C): 15% faster deterioration
