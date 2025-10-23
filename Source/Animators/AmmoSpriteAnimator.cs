@@ -1,6 +1,7 @@
 using AdaptiveArsenal.Utilities;
 using System.Collections;
 using Il2CppInterop.Runtime.Attributes;
+using Il2CppNewtonsoft.Json;
 
 namespace AdaptiveArsenal.Animators;
 
@@ -33,6 +34,14 @@ public class AmmoSpriteAnimator : MonoBehaviour
             startPosition.y + 100f,
             startPosition.z
         );
+
+        if (AdaptiveArsenal.Utilities.WeatherWeaponModifier.GetAccuracyModifier() < 1f)
+        {
+            // In bad weather, make the ejection more erratic
+            controlPoint.y += 50f;
+            end.x += UnityEngine.Random.Range(-30f, 30f);
+            end.y -= UnityEngine.Random.Range(0f, 30f);
+        }
 
         var duration = 1f;
         var elapsedTime = 0f;

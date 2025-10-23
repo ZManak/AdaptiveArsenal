@@ -76,13 +76,12 @@ public class WeaponCondition : MonoBehaviour
     private void UpdateWeaponCondition()
     {
         var currentTemp = GameManager.GetWeatherComponent().GetCurrentTemperature();
-        // Use actual indoor/outdoor state from the game if available
-        var isIndoors = GameManager.GetWeatherComponent().IsPlayerIndoors();
+        var tempUp = currentTemp > 0;
         
         // Drying logic
         if (m_WetnessLevel > 0)
         {
-            if (isIndoors || currentTemp > DryingTemperature)
+            if (tempUp || currentTemp > DryingTemperature)
             {
                 // Dry faster when indoors or in warm weather
                 m_WetnessLevel = Mathf.Max(0f, m_WetnessLevel - (WetnessDryingRate * 2f * Time.deltaTime));
@@ -95,12 +94,12 @@ public class WeaponCondition : MonoBehaviour
         }
         
         // Freezing logic for wet weapons
-        if (m_WetnessLevel > 0.1f && !isIndoors && currentTemp < FreezingTemperature)
+        if (m_WetnessLevel > 0.1f && !tempUp && currentTemp < FreezingTemperature)
         {
             // Weapon starts to freeze when wet and in cold conditions
             m_FreezingLevel = Mathf.Min(1f, m_FreezingLevel + (FreezingRate * Time.deltaTime));
         }
-        else if (m_FreezingLevel > 0 && (isIndoors || currentTemp > 0))
+        else if (m_FreezingLevel > 0 && (tempUp || currentTemp > 0))
         {
             // Weapon thaws when brought to warmth
             m_FreezingLevel = Mathf.Max(0f, m_FreezingLevel - (ThawingRate * Time.deltaTime));
