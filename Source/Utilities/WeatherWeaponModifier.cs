@@ -40,6 +40,7 @@ internal static class WeatherWeaponModifier
             modifier *= WindAccuracyPenalty;
         }
         
+        AdaptiveArsenal.Utilities.Logging.LogDebug("Accuracy Modifier: {0}", modifier);
         return modifier;
     }
     
@@ -66,6 +67,7 @@ internal static class WeatherWeaponModifier
             modifier *= WetDamagePenalty;
         }
         
+        AdaptiveArsenal.Utilities.Logging.LogDebug("Damage Modifier: {0}", modifier);
         return modifier;
     }
     
@@ -92,6 +94,7 @@ internal static class WeatherWeaponModifier
             modifier *= WetDeteriorationIncrease;
         }
         
+        AdaptiveArsenal.Utilities.Logging.LogDebug("Deterioration Modifier: {0}", modifier);
         return modifier;
     }
 }
