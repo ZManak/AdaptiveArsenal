@@ -67,6 +67,9 @@ public class ProjectileItem : MonoBehaviour
         if (isStanding) accuracyMultiplier *= 0.8f;
         if (isMoving) accuracyMultiplier *= 0.9f;
         
+        // Apply weather-based accuracy modifier
+        accuracyMultiplier *= Utilities.WeatherWeaponModifier.GetAccuracyModifier();
+        
         return baseAccuracy * accuracyMultiplier;
     }
     
@@ -146,6 +149,15 @@ public class ProjectileItem : MonoBehaviour
         var distanceBasedDamage = CalculateDamageByDistance(distance);
 
         var damage = distanceBasedDamage * damageScaleFactor;
+        
+        // Apply weather-based damage modifier
+        var gunItem = GameManager.GetPlayerManagerComponent().m_ItemInHands?.m_GunItem;
+        if (gunItem != null)
+        {
+            var weaponCondition = gunItem.GetComponent<Components.WeaponCondition>();
+            var weatherModifier = Utilities.WeatherWeaponModifier.GetDamageModifier(weaponCondition);
+            damage *= weatherModifier;
+        }
 
         if (!baseAi.m_IgnoreCriticalHits && localizedDamage.RollChanceToKill(WeaponSource.Rifle)) damage = float.PositiveInfinity;
 
