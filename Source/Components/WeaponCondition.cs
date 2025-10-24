@@ -72,16 +72,30 @@ public class WeaponCondition : MonoBehaviour
             _ => 1f // Normal jamming chance
         };
     }
-    
+
+    public float GetReloadSpeedModifier()
+    {
+        // Wet weapons reload slower
+        // Freezing weapons reload even slower
+        return m_CurrentState switch
+        {
+            WeaponState.Wet => 0.9f - (m_WetnessLevel * 0.2f), // 0.9x to 0.7x reload speed
+            WeaponState.Freezing => 0.8f - (m_FreezingLevel * 0.3f), // 0.8x to 0.5x reload speed
+            WeaponState.Frozen => 0f, // Cannot reload
+            _ => 1f // Normal reload speed
+        };
+    }
+
     private void UpdateWeaponCondition()
     {
         var currentTemp = GameManager.GetWeatherComponent().GetCurrentTemperature();
         var tempUp = currentTemp > 0;
-        
+        var isIndoor = GameManager.m_Weather.IsIndoorEnvironment();
+
         // Drying logic
         if (m_WetnessLevel > 0)
         {
-            if (tempUp || currentTemp > DryingTemperature)
+            if (isIndoor)
             {
                 // Dry faster when indoors or in warm weather
                 m_WetnessLevel = Mathf.Max(0f, m_WetnessLevel - (WetnessDryingRate * 2f * Time.deltaTime));

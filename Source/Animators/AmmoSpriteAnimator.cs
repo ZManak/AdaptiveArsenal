@@ -1,7 +1,11 @@
 using AdaptiveArsenal.Utilities;
 using System.Collections;
+using System.Collections.Generic;
 using Il2CppInterop.Runtime.Attributes;
 using Il2CppNewtonsoft.Json;
+using AdaptiveArsenal.Components;
+using UnityEngine;
+
 
 namespace AdaptiveArsenal.Animators;
 
@@ -9,7 +13,7 @@ namespace AdaptiveArsenal.Animators;
 public class AmmoSpriteAnimator : MonoBehaviour
 {
     private GameObject ammoPrefab;
-    private readonly List<GameObject> activeAmmoSprites = [];
+    private readonly List<GameObject> activeAmmoSprites = new List<GameObject>();
 
     [HideFromIl2Cpp]
     internal IEnumerator CasingEjectionAnimation(Vector3 startPosition, Transform parentTransform, GunType gunType)
@@ -28,6 +32,13 @@ public class AmmoSpriteAnimator : MonoBehaviour
             _ => ""
         };
 
+        // If the weapon isn't dry, tint the sprite blue
+        var weaponCondition = GameManager.GetPlayerManagerComponent().m_ItemInHands?.m_GunItem?.GetComponent<WeaponCondition>();
+        if (weaponCondition != null && weaponCondition.CurrentState != WeaponState.Dry)
+        {
+            sprite.color = Color.blue;
+        }
+
         var end = new Vector3(startPosition.x + 100f, startPosition.y - 150f, startPosition.z);
         var controlPoint = new Vector3(
             startPosition.x + 50f,
@@ -41,7 +52,17 @@ public class AmmoSpriteAnimator : MonoBehaviour
             controlPoint.y += 50f;
             end.x += UnityEngine.Random.Range(-30f, 30f);
             end.y -= UnityEngine.Random.Range(0f, 30f);
+            Logging.LogDebug("Adjusted casing ejection for bad weather conditions.");
         }
+
+        if (GameManager.GetWindComponent()) 
+        {
+            // In windy conditions, adjust the ejection path
+            controlPoint.x += 30f;
+            end.x += 60f;
+            Logging.LogDebug("Adjusted casing ejection for wind conditions.");
+        }
+        
 
         var duration = 1f;
         var elapsedTime = 0f;
