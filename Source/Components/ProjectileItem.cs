@@ -3,7 +3,7 @@ using Il2CppTLD.Stats;
 
 namespace AdaptiveArsenal.Components;
 
-[RegisterTypeInIl2Cpp(false)]
+[RegisterTypeInIl2Cpp(true)]
 public class ProjectileItem : MonoBehaviour
 {
     private AmmoItem m_AmmoItem;
@@ -26,7 +26,7 @@ public class ProjectileItem : MonoBehaviour
     private const int InitialTrajectoryCapacity = 100;
     private int CurrentTrajectoryIndex;
     private Vector3 InitialPosition;
-    private List<Vector3> TrajectoryPoints;
+    private List<Vector3> TrajectoryPoints = new List<Vector3>(InitialTrajectoryCapacity);
     
     private static readonly Dictionary<string, int> GunMuzzleVelocities = new()
     {
@@ -46,8 +46,6 @@ public class ProjectileItem : MonoBehaviour
         m_Rigidbody = GetComponent<Rigidbody>();
         m_AmmoItem = GetComponent<AmmoItem>();
 
-        TrajectoryPoints = new List<Vector3>(InitialTrajectoryCapacity);
-        
         ConfigureComponents();
         enabled = false;
     }
