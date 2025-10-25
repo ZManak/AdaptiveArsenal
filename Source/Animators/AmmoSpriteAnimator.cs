@@ -20,6 +20,7 @@ public class AmmoSpriteAnimator : MonoBehaviour
 
         var sprite = casingObject.GetComponent<UISprite>();
         sprite.depth = 30;
+        sprite.color = Color.cyan;
         sprite.spriteName = gunType switch
         {
             GunType.Rifle => "ico_ammo_rifle",
