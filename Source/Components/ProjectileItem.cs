@@ -107,8 +107,8 @@ public class ProjectileItem : MonoBehaviour
         m_Rigidbody.drag = 0.1f;
         m_Rigidbody.angularDrag = 0.1f;
 
-        m_LineRenderer.startColor = new Color(1f, 0f, 0f, 0f);
-        m_LineRenderer.endColor = Color.red * 0.7f;
+        m_LineRenderer.startColor = new Color(1f, 0f, 0f, 1f); // Match gradient: opaque red at start
+        m_LineRenderer.endColor = new Color(1f, 0f, 0f, 0f);   // Match gradient: transparent red at end
         
         var muzzleVelocity = transform.forward * (GetMuzzleVelocity(GameManager.GetPlayerManagerComponent().m_ItemInHands.name) * ScaleMultiplier);
         m_Rigidbody.AddForce(muzzleVelocity, ForceMode.VelocityChange);
