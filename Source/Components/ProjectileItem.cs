@@ -18,7 +18,7 @@ public class ProjectileItem : MonoBehaviour
     private static readonly int[] RevolverEffectiveRange = [40, 50, 60, 80, 100];
     
     private bool LineRendererStartFadeOut;
-    private const float LineRendererFadeDuration = 5f;
+    private const float LineRendererFadeDuration = 10f;
     private const float LineRendererMaxLength = 200f;
     private const float TrajectoryUpdateInterval = 0.05f;
     private float LastTrajectoryUpdateTime;
@@ -87,7 +87,7 @@ public class ProjectileItem : MonoBehaviour
         m_LineRenderer.endWidth = 0.1f;
 
         Gradient gradient = new();
-        gradient.SetKeys(new GradientColorKey[] { new(Color.red, 0.0f), new(Color.red, 1.0f) }, new GradientAlphaKey[] { new(1.0f, 0.0f), new(0.0f, 1.0f) });
+        gradient.SetKeys(new GradientColorKey[] { new(Color.red, 0.0f), new(Color.red, 1.0f) }, new GradientAlphaKey[] { new(0.8f, 0.0f), new(0.3f, 1.0f) });
         m_LineRenderer.colorGradient = gradient;
         m_LineRenderer.useWorldSpace = true;
         m_LineRenderer.positionCount = 0;
@@ -172,7 +172,8 @@ public class ProjectileItem : MonoBehaviour
         LineRendererStartFadeOut = true;
         LineRendererFadeTimer = 0f;
         
-        Destroy(gameObject);
+        // Don't destroy immediately - let the trajectory fade out first
+        // Destruction will happen in Update() after fade completes
     }
 
     internal static void SpawnAndFire(GameObject prefab, Vector3 startPos, Quaternion startRot)
@@ -245,6 +246,7 @@ public class ProjectileItem : MonoBehaviour
             if (LineRendererFadeTimer >= LineRendererFadeDuration)
             {
                 Destroy(m_LineRenderer);
+                Destroy(gameObject);
             }
         }
     }
