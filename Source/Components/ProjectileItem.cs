@@ -18,7 +18,7 @@ public class ProjectileItem : MonoBehaviour
     private static readonly int[] RevolverEffectiveRange = [40, 50, 60, 80, 100];
     
     private bool LineRendererStartFadeOut;
-    private const float LineRendererFadeDuration = 2f;
+    private const float LineRendererFadeDuration = 5f;
     private const float LineRendererMaxLength = 200f;
     private const float TrajectoryUpdateInterval = 0.05f;
     private float LastTrajectoryUpdateTime;
@@ -87,7 +87,7 @@ public class ProjectileItem : MonoBehaviour
         m_LineRenderer.endWidth = 0.1f;
 
         Gradient gradient = new();
-        gradient.SetKeys(new GradientColorKey[] { new(Color.white, 0.0f), new(Color.white, 1.0f) }, new GradientAlphaKey[] { new(1.0f, 0.0f), new(0.0f, 1.0f) });
+        gradient.SetKeys(new GradientColorKey[] { new(Color.red, 0.0f), new(Color.red, 1.0f) }, new GradientAlphaKey[] { new(1.0f, 0.0f), new(0.0f, 1.0f) });
         m_LineRenderer.colorGradient = gradient;
         m_LineRenderer.useWorldSpace = true;
         m_LineRenderer.positionCount = 0;
@@ -107,8 +107,8 @@ public class ProjectileItem : MonoBehaviour
         m_Rigidbody.drag = 0.1f;
         m_Rigidbody.angularDrag = 0.1f;
 
-        m_LineRenderer.startColor = new Color(1f, 1f, 1f, 0f);
-        m_LineRenderer.endColor = Color.white * 0.7f;
+        m_LineRenderer.startColor = new Color(1f, 0f, 0f, 1f); // Match gradient: opaque red at start
+        m_LineRenderer.endColor = new Color(1f, 0f, 0f, 0f);   // Match gradient: transparent red at end
         
         var muzzleVelocity = transform.forward * (GetMuzzleVelocity(GameManager.GetPlayerManagerComponent().m_ItemInHands.name) * ScaleMultiplier);
         m_Rigidbody.AddForce(muzzleVelocity, ForceMode.VelocityChange);
