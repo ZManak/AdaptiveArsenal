@@ -4,8 +4,18 @@ namespace AdaptiveArsenal.Utilities;
 
 internal static class Logging
 {
-    private static bool IsDevModeEnabled => AdaptiveArsenal.Settings.ArsenalSettings.Options.DevMode == 0;
+    private static bool _isDevModeEnabled;
+    private static bool IsDevModeEnabled => _isDevModeEnabled;
 
+    static Logging()
+    {
+        UpdateDevModeStatus();
+    }
+
+    public static void UpdateDevModeStatus()
+    {
+        _isDevModeEnabled = AdaptiveArsenal.Settings.ArsenalSettings.Options.DevMode == 0;
+    }
     internal static void Log(string message, params object[] parameters)
     {
         if (IsDevModeEnabled)
