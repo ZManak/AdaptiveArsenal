@@ -5,8 +5,8 @@ namespace AdaptiveArsenal;
 internal sealed class Mod : MelonMod
 {
     public static Mod Instance { get; private set; }
-
     private int currentSkinIndex = 0;
+    
     private readonly Dictionary<GunType, string[]> weaponSkins = new()
     {
         { GunType.Revolver, [
@@ -25,12 +25,14 @@ internal sealed class Mod : MelonMod
 
     public override void OnInitializeMelon()
     {
+        Settings.ArsenalSettings.OnLoad();
         Instance = this;
+        Logging.Log("Loaded Arsenal");
     }
 
     public override void OnUpdate()
     {
-        if (InputManager.GetKeyDown(InputManager.m_CurrentContext, KeyCode.T))
+        if (InputManager.GetKeyDown(InputManager.m_CurrentContext, Settings.ArsenalSettings.Options.SwapKey))
         {
             var gunItem = GameManager.GetPlayerManagerComponent().m_ItemInHands?.m_GunItem;
             if (gunItem == null) return;
@@ -44,6 +46,9 @@ internal sealed class Mod : MelonMod
             ChangeWeaponSkin(gunItem.gameObject, selectedSkin);
             ChangeFirstPersonWeaponSkin(selectedSkin, gunType);
         }
+
+        // Update detached trails each frame
+        AdaptiveArsenal.Components.DetachedTrailManager.UpdateAll();
     }
 
     public void ChangeWeaponSkin(GameObject weapon, string skinResourceName)
