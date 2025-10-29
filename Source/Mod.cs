@@ -69,31 +69,28 @@ internal sealed class Mod : MelonMod
         Texture2D texture = WeaponSkinLoader.LoadEmbeddedTexture(skinResourceName);
         if (texture != null)
         {
+            var currentWeapon = GameManager.GetVpFPSCamera().m_CurrentWeapon;
             if (gunType == GunType.Rifle)
             {
-                ApplySkinToSpecificRifleMeshes(GameManager.GetVpFPSCamera().m_CurrentWeapon.m_FirstPersonWeaponShoulder.gameObject, texture);
+                ApplySkinToSpecificRifleMeshes(currentWeapon.m_FirstPersonWeaponShoulder.gameObject, texture);
             }
             else if (gunType == GunType.Revolver)
             {
-                ApplySkinToSpecificRevolverMeshes(GameManager.GetVpFPSCamera().m_CurrentWeapon.m_FirstPersonWeaponShoulder.gameObject, texture);
+                ApplySkinToSpecificRevolverMeshes(currentWeapon.m_FirstPersonWeaponShoulder.gameObject, texture);
             }
             else
             {
-                ApplySkinToFirstPersonModel(GameManager.GetVpFPSCamera().m_CurrentWeapon.m_FirstPersonWeaponRightHand.gameObject, texture);
+                ApplySkinToFirstPersonModel(currentWeapon.m_FirstPersonWeaponRightHand.gameObject, texture);
             }
         }
     }
 
-    public void ApplySkinToSpecificRevolverMeshes(GameObject root, Texture2D skinTexture)
+    private void ApplyTextureToChildren(Transform parent, Texture2D skinTexture, Func<Transform, bool>? childFilter = null)
     {
-        Transform gameData = root.transform.Find("FPH_Revolver_44Mag_Rig/GAME_DATA/mesh/FPH_Revolver_44Mag:OBJ_Revolver_44Mag");
-        if (gameData == null) return;
-
-        for (int i = 0; i < gameData.childCount; i++)
+        for (int i = 0; i < parent.childCount; i++)
         {
-            var child = gameData.GetChild(i);
-
-            if (child != null)
+            var child = parent.GetChild(i);
+            if (child != null && (childFilter == null || childFilter(child)))
             {
                 var renderer = child.GetComponent<Renderer>();
                 if (renderer != null)
@@ -103,17 +100,12 @@ internal sealed class Mod : MelonMod
             }
         }
     }
-    
-    public void ApplySkinToSpecificRifleMeshes(GameObject root, Texture2D skinTexture)
+
+    private void ApplyTextureToNamedChildren(Transform parent, Texture2D skinTexture, string[] childNames)
     {
-        Transform gameData = root.transform.Find("GAME_DATA/Meshes");
-        if (gameData == null) return;
-
-        string[] rifleMeshes = { "mesh_bolt", "mesh_rifle", "mesh_trigger" };
-
-        foreach (var meshName in rifleMeshes)
+        foreach (var meshName in childNames)
         {
-            Transform child = gameData.Find(meshName);
+            Transform child = parent.Find(meshName);
             if (child != null)
             {
                 Renderer renderer = child.GetComponent<Renderer>();
@@ -125,23 +117,28 @@ internal sealed class Mod : MelonMod
         }
     }
 
+    public void ApplySkinToSpecificRevolverMeshes(GameObject root, Texture2D skinTexture)
+    {
+        Transform gameData = root.transform.Find("FPH_Revolver_44Mag_Rig/GAME_DATA/mesh/FPH_Revolver_44Mag:OBJ_Revolver_44Mag");
+        if (gameData == null) return;
+
+        ApplyTextureToChildren(gameData, skinTexture);
+    }
+    
+    public void ApplySkinToSpecificRifleMeshes(GameObject root, Texture2D skinTexture)
+    {
+        Transform gameData = root.transform.Find("GAME_DATA/Meshes");
+        if (gameData == null) return;
+
+        string[] rifleMeshes = { "mesh_bolt", "mesh_rifle", "mesh_trigger" };
+        ApplyTextureToNamedChildren(gameData, skinTexture, rifleMeshes);
+    }
+
     public void ApplySkinToFirstPersonModel(GameObject root, Texture2D skinTexture)
     {
         Transform gameData = root.transform.Find("FPHAnd_FlareGun_rig/GAME_DATA/mesh");
         if (gameData == null) return;
 
-        for (int i = 0; i < gameData.childCount; i++)
-        {
-            var child = gameData.GetChild(i);
-
-            if (child != null && child.name != "mesh_Shell")
-            {
-                var renderer = child.GetComponent<Renderer>();
-                if (renderer != null)
-                {
-                    renderer.material.mainTexture = skinTexture;
-                }
-            }
-        }
+        ApplyTextureToChildren(gameData, skinTexture, child => child.name != "mesh_Shell");
     }
 }
