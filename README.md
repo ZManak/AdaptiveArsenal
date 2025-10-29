@@ -36,6 +36,7 @@ For optimal functionality of this modification, ensure you have the following ve
 
 - [**The Long Dark**](https://store.steampowered.com/news/app/305620) - Version: **v2.39**
 - [**MelonLoader**](https://github.com/LavaGang/MelonLoader/releases) - Version: **v0.6.6**
+- [**ModSettings**](https://github.com/DigitalzombieTLD/ModSettings/releases) - Latest
 
 ### Incompatible Mods:
 

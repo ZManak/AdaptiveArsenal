@@ -13,7 +13,7 @@
 	<PropertyGroup>
 		<!-- This should point to wherever your games primary EXE is -->
 		<TheLongDarkPath>C:\Program Files (x86)\Steam\steamapps\common\TheLongDark</TheLongDarkPath>
-		<ReleaseFolderPath>D:\The Long Dark\Projects\Maintained\AdaptiveArsenal\Release</ReleaseFolderPath>
+		<ReleaseFolderPath>C:\The Long Dark\Projects\Maintained\AdaptiveArsenal\Test</ReleaseFolderPath>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -28,6 +28,7 @@
 	<ItemGroup>
 		<PackageReference Include="STBlade.Modding.TLD.Il2CppAssemblies.Windows" Version="2.36.0" />
 		<PackageReference Include="STBlade.Modding.TLD.LocalizationUtilities" Version="2.0.0" />
+		<PackageReference Include="STBlade.Modding.TLD.ModSettings" Version="1.9.0" />
 	</ItemGroup>
 
 	<!-- Most commonly used using's. Add to this so you dont need to define them in the cs files -->
