@@ -2,27 +2,31 @@ namespace AdaptiveArsenal.Utilities;
 
 internal static class ProjectileUtilities
 {
+    private static void SetBulletEmissionLocatorAndSights(vp_FPSShooter instance, out Transform? frontSight, out Transform? rearSight)
+    {
+        frontSight = null;
+        rearSight = null;
+
+        if (instance.m_Weapon.m_FirstPersonWeaponRightHand && instance.m_Weapon.m_FirstPersonWeaponRightHand.m_BulletEmissionPoint)
+        {
+            instance.BulletEmissionLocator = instance.m_Weapon.m_FirstPersonWeaponRightHand.m_BulletEmissionPoint.transform;
+            frontSight = instance.m_Weapon.m_FirstPersonWeaponRightHand.m_FrontSight;
+            rearSight = instance.m_Weapon.m_FirstPersonWeaponRightHand.m_RearSight;
+        }
+        else if (instance.m_Weapon.m_FirstPersonWeaponShoulder && instance.m_Weapon.m_FirstPersonWeaponShoulder.m_BulletEmissionPoint)
+        {
+            instance.BulletEmissionLocator = instance.m_Weapon.m_FirstPersonWeaponShoulder.m_BulletEmissionPoint.transform;
+            frontSight = instance.m_Weapon.m_FirstPersonWeaponShoulder.m_FrontSight;
+            rearSight = instance.m_Weapon.m_FirstPersonWeaponShoulder.m_RearSight;
+        }
+    }
+
     internal static void CalculateProjectileTransform(vp_FPSShooter instance, out Vector3 position, out Quaternion rotation)
     {
         var weaponCamera = instance.m_Camera.GetWeaponCamera();
         var mainCamera = GameManager.GetMainCamera();
 
-        Transform? transform = null;
-        Transform? transform2 = null;
-
-        if (instance.m_Weapon.m_FirstPersonWeaponRightHand && instance.m_Weapon.m_FirstPersonWeaponRightHand.m_BulletEmissionPoint)
-        {
-            instance.BulletEmissionLocator = instance.m_Weapon.m_FirstPersonWeaponRightHand.m_BulletEmissionPoint.transform;
-            transform = instance.m_Weapon.m_FirstPersonWeaponRightHand.m_FrontSight;
-            transform2 = instance.m_Weapon.m_FirstPersonWeaponRightHand.m_RearSight;
-            
-        }
-        else if (instance.m_Weapon.m_FirstPersonWeaponShoulder && instance.m_Weapon.m_FirstPersonWeaponShoulder.m_BulletEmissionPoint)
-        {
-            instance.BulletEmissionLocator = instance.m_Weapon.m_FirstPersonWeaponShoulder.m_BulletEmissionPoint.transform;
-            transform = instance.m_Weapon.m_FirstPersonWeaponShoulder.m_FrontSight;
-            transform2 = instance.m_Weapon.m_FirstPersonWeaponShoulder.m_RearSight;
-        }
+        SetBulletEmissionLocatorAndSights(instance, out Transform? transform, out Transform? transform2);
 
         position = Vector3.zero;
         rotation = Quaternion.identity;
@@ -50,13 +54,6 @@ internal static class ProjectileUtilities
     
     internal static void SetBulletEmissionLocator(vp_FPSShooter instance)
     {
-        if (instance.m_Weapon.m_FirstPersonWeaponRightHand && instance.m_Weapon.m_FirstPersonWeaponRightHand.m_BulletEmissionPoint)
-        {
-            instance.BulletEmissionLocator = instance.m_Weapon.m_FirstPersonWeaponRightHand.m_BulletEmissionPoint.transform;
-        }
-        else if (instance.m_Weapon.m_FirstPersonWeaponShoulder && instance.m_Weapon.m_FirstPersonWeaponShoulder.m_BulletEmissionPoint)
-        {
-            instance.BulletEmissionLocator = instance.m_Weapon.m_FirstPersonWeaponShoulder.m_BulletEmissionPoint.transform;
-        }
+        SetBulletEmissionLocatorAndSights(instance, out _, out _);
     }
 }
