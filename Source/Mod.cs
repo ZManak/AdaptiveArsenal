@@ -69,17 +69,18 @@ internal sealed class Mod : MelonMod
         Texture2D texture = WeaponSkinLoader.LoadEmbeddedTexture(skinResourceName);
         if (texture != null)
         {
+            var currentWeapon = GameManager.GetVpFPSCamera().m_CurrentWeapon;
             if (gunType == GunType.Rifle)
             {
-                ApplySkinToSpecificRifleMeshes(GameManager.GetVpFPSCamera().m_CurrentWeapon.m_FirstPersonWeaponShoulder.gameObject, texture);
+                ApplySkinToSpecificRifleMeshes(currentWeapon.m_FirstPersonWeaponShoulder.gameObject, texture);
             }
             else if (gunType == GunType.Revolver)
             {
-                ApplySkinToSpecificRevolverMeshes(GameManager.GetVpFPSCamera().m_CurrentWeapon.m_FirstPersonWeaponShoulder.gameObject, texture);
+                ApplySkinToSpecificRevolverMeshes(currentWeapon.m_FirstPersonWeaponShoulder.gameObject, texture);
             }
             else
             {
-                ApplySkinToFirstPersonModel(GameManager.GetVpFPSCamera().m_CurrentWeapon.m_FirstPersonWeaponRightHand.gameObject, texture);
+                ApplySkinToFirstPersonModel(currentWeapon.m_FirstPersonWeaponRightHand.gameObject, texture);
             }
         }
     }
